@@ -22,6 +22,17 @@ namespace Sales.API.Controllers
             return Ok(await _context.Categories.ToListAsync());
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return Ok(category);
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostAsync(Category category)
         {
@@ -30,5 +41,28 @@ namespace Sales.API.Controllers
             return Ok(category);
 
         }
+
+        [HttpPut]
+        public async Task<ActionResult> PutAsync(Category category)
+        {
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
+            return Ok(category);
+
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
     }
 }
